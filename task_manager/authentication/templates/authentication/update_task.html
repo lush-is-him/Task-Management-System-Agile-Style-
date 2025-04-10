@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="name" value="{{ task.name }}" required><br>
+        <textarea name="description">{{ task.description }}</textarea><br>
+    
+        <label>Status:</label>
+        <select name="status">
+            {% for key, value in task.STATUS_CHOICES %}
+                <option value="{{ key }}" {% if task.status == key %}selected{% endif %}>{{ value }}</option>
+            {% endfor %}
+        </select><br>
+    
+        <label>Priority:</label>
+        <select name="priority">
+            {% for key, value in task.PRIORITY_CHOICES %}
+                <option value="{{ key }}" {% if task.priority == key %}selected{% endif %}>{{ value }}</option>
+            {% endfor %}
+        </select><br>
+    
+        <button type="submit">Update Task</button>
+    </form>
+    
+</body>
+</html>

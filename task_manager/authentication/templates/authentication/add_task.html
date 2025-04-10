@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Task</title>
+</head>
+<body>
+    <h2>Add a New Task</h2>
+
+    <!-- add_task.html -->
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="Task Name" required>
+        <textarea name="description" placeholder="Task Description"></textarea>
+    
+        <label for="priority">Priority:</label>
+        <select name="priority">
+            <option value="L">Low</option>
+            <option value="M" selected>Medium</option>
+            <option value="H">High</option>
+        </select>
+    
+        <label for="team">Assign to Team:</label>
+        <select name="team">
+            <option value="">--None--</option>
+            {% for team in user.teams.all %}
+                <option value="{{ team.id }}">{{ team.name }}</option>
+            {% endfor %}
+        </select>
+    
+        <button type="submit">Create Task</button>
+    </form>
+    
+
+
+    <a href="{% url 'dashboard' %}">Back to Dashboard</a>
+</body>
+</html>

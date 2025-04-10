@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Team</title>
+</head>
+<body>
+    <h2>Edit Team</h2>
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="name" value="{{ team.name }}" required>
+        <button type="submit">Save</button>
+    </form>
+</body>
+</html>

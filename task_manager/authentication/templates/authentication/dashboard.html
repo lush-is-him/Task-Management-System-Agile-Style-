@@ -1,0 +1,78 @@
+{% load custom_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Welcome, {{ user.username }}</h1>
+
+    <!-- Create Team Button -->
+    <p><a href="{% url 'create_team' %}">➕ Create a Team</a></p>
+
+    <!-- Show Teams and Options -->
+    {% if tasks_by_team %}
+        <h2>Your Teams:</h2>
+        {% for team_name, tasks in tasks_by_team.items %}
+            {% if team_name != "Personal Tasks" %}
+                <div style="border:1px solid #ccc; padding:10px; margin-bottom:15px;">
+                    <h3>{{ team_name }}</h3>
+
+                    {% if tasks %}
+                        <h4>Tasks for {{ team_name }}</h4>
+                        <ul>
+                            {% for task in tasks %}
+                                <li>
+                                    <strong>{{ task.name }}</strong> - {{ task.description }} - 
+                                    Priority: {{ task.get_priority_display }} - 
+                                    Status: {{ task.get_status_display }}
+                                    <form action="{% url 'delete_task' task.id %}" method="POST" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit">Delete</button>
+                                    </form>
+                                    <a href="{% url 'update_task' task.id %}">Edit</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>No tasks for this team.</p>
+                    {% endif %}
+
+                    <!-- Only the leader can manage the team -->
+                    {% if team.leader == user %}
+                        <a href="{% url 'edit_team' team.id %}">✏️ Edit Team</a> |
+                        <a href="{% url 'delete_team' team.id %}">🗑️ Delete Team</a> |
+                        <a href="{% url 'add_member' team.id %}">➕ Add Member</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    <!-- Show personal tasks -->
+    <h2>Personal Tasks:</h2>
+    {% if tasks_by_team|get_item:"Personal Tasks" %}
+        <ul>
+            {% for task in tasks_by_team|get_item:"Personal Tasks" %}
+                <li>
+                    <strong>{{ task.name }}</strong> - {{ task.description }} - 
+                    Priority: {{ task.get_priority_display }} - 
+                    Status: {{ task.get_status_display }}
+                    <form action="{% url 'delete_task' task.id %}" method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit">Delete</button>
+                    </form>
+                    <a href="{% url 'update_task' task.id %}">Edit</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No personal tasks.</p>
+    {% endif %}
+
+    <br>
+    <a href="{% url 'add_task' %}">➕ Add Task</a>
+</body>
+</html>

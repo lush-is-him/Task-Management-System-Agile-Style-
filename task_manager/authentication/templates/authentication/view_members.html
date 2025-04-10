@@ -1,0 +1,19 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Task</title>
+</head>
+<body>
+    <h2>Members of {{ team.name }}</h2>
+    <ul>
+      {% for member in members %}
+        <li>{{ member.username }}</li>
+      {% endfor %}
+    </ul>
+    
+    
+</body>
+</html>
